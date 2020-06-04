@@ -26,7 +26,10 @@
       .title { grid-area: title; }
       .control-panel { grid-area: control-panel; align-self: center;}
       .heading { grid-area: heading; }
-      .main-selection { grid-area: main-selection; align-self: center; }
+      .main-selection { grid-area: main-selection; align-self: center;
+        background: rgba(73, 141, 227, 0.7);
+        border-radius: 25px;
+}
       .selection-panels {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
@@ -143,7 +146,7 @@
       <div class='current'>
         <img id='effect' src="images/temp.png" alt="Sound Effect">
         <div class='orange-div'>
-          <h3 id='description'></h3>
+          <h3 id='description'>Select to Begin</h3>
         </div>
       </div>
     </div>
