@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -120,6 +119,9 @@
       .highlight{
         background-color: #7cd994 !important;
       }
+      .highlight2{
+        background-color: #7cd994 !important;
+      }
     </style>
   </head>
 <body>
@@ -132,8 +134,8 @@
     </div>
     <div class="control-panel">
       <div class='flexbox'>
-        <input class='audio-btn' type="image" src="images/microphone.png" />
-        <input class='audio-btn' type="image" src="images/record.png" />
+        <input class='audio-btn highlight2' type="image" src="images/microphone.png" id="microphone" onclick="selectOutput(this);" />
+        <input class='audio-btn' type="image" src="images/record.png" id="recording" onclick="selectOutput(this);" />
       </div></div>
     <div class="heading">
       <div class='orange-div'>

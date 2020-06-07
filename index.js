@@ -1,10 +1,32 @@
-var context, gain, osc;
+var context = new AudioContext();
+var gain = context.createGain();
+gain.connect(context.destination);
+var output = "microphone";
+var dest = context.createMediaStreamDestination();
+var mediaRecorder = new MediaRecorder(dest.stream); 
+var osc;
+var chunks = [];
 
-window.onload=function(){
-    context = new AudioContext();
-    gain = context.createGain();
-    gain.connect(context.destination);
-}
+
+mediaRecorder.onstop = function(evt) {
+    var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+    var url = window.URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'wya.webm';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }, 100);
+}; 
+
+mediaRecorder.ondataavailable = function(evt) {
+    chunks.push(evt.data);
+};
+
 
 
 function selectEffect(button){
@@ -19,6 +41,25 @@ function selectEffect(button){
     }
     makeSomeNoise($(button).attr('id'));
 }
+
+function selectOutput(button){
+    if (output=="recording" && $(button).attr('id')=="microphone"){
+        mediaRecorder.stop(); 
+    }
+    $(".highlight2").removeClass("highlight2");
+    $(button).addClass("highlight2");
+    output = $(button).attr('id');
+    gain.disconnect();
+    if (output=="microphone"){
+        gain.connect(context.destination);
+    }
+    else {    
+        gain.connect(dest);  
+        mediaRecorder.start();
+    }
+}
+
+
 
 
 function makeSomeNoise(fn){
@@ -61,10 +102,7 @@ function underwater(input){
         pitch += adder;
         // Calculate the pitch shifted grain re-sampling and looping the input
         var grainData = new Float32Array(grainSize * 2);
-        for (var i = 0, j = 0.0;
-             i < grainSize;
-             i++, j += pitch) {
-
+        for (var i = 0, j = 0.0; i < grainSize; i++, j += pitch) {
             var index = Math.floor(j) % grainSize;
             var a = inputData[index];
             var b = inputData[(index + 1) % grainSize];
